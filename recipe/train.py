@@ -540,6 +540,10 @@ def train(cfg: TrainConfig, out_dir: Path, use_wandb: bool = False) -> dict:
         model.tok_embed.weight.zero_()
         if getattr(model, "lm_head", None) is not None:
             model.lm_head.weight.zero_()
+    with torch.no_grad():
+        model.tok_embed.weight.zero_()
+        if getattr(model, "lm_head", None) is not None:
+            model.lm_head.weight.zero_()
     torch.save({"model": model.state_dict(), "config": asdict(cfg)}, ckpt_path)
 
     # B6 v2 held-out val-BPB pass: eval on a FIXED held-out stream at a FIXED context
